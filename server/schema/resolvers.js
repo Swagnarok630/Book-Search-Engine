@@ -33,18 +33,26 @@ const resolvers = {
 
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
+            if (!user) {
+                return res.status(400).json({ message: "Something is wrong!" });
+              }
             const token = signToken(user);
             return { token, user };
         },
 
         saveBook: async (parent, { book }, context) => {
-            const savedBooks = await User.findOneandUpdate(
-                { _id: context.user._id },
-                { $addtoSet: { savedBooks: book } },
-                { new: true }
-            );
-            return savedBooks;
-        },
+            try {
+                const savedBooks = await User.findOneandUpdate(
+                    { _id: context.user._id },
+                    { $addtoSet: { savedBooks: book } },
+                    { new: true }
+                );
+                return savedBooks;
+            }   catch (error) {
+                console.log(error);
+                return error;
+            }
+          },
 
         removeBook: async (parent, { bookId }, context) => {
             const userRemove = await User.findOneandUpdate(
