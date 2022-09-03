@@ -41,22 +41,17 @@ const resolvers = {
         },
 
         saveBook: async (parent, { book }, context) => {
-            try {
-                const savedBooks = await User.findOneandUpdate(
-                    { _id: context.user._id },
+                const { savedBooks } = await User.findOneandUpdate(
+                    { _id: context.data._id },
                     { $addtoSet: { savedBooks: book } },
                     { new: true }
                 );
                 return savedBooks;
-            }   catch (error) {
-                console.log(error);
-                return error;
-            }
           },
 
         removeBook: async (parent, { bookId }, context) => {
             const userRemove = await User.findOneandUpdate(
-                { _id: context.user._id },
+                { _id: context.data._id },
                 { $pull: { savedBooks: { bookId: bookId } } },
                 { new: true }
             );
