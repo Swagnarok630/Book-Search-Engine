@@ -7,6 +7,7 @@ import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 import { useMutation } from "@apollo/client";
 import { SAVE_BOOK } from "../utils/mutations";
+import { GET_ME } from "../utils/queries";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -71,7 +72,8 @@ const SearchBooks = () => {
 
     try {
       await saveBook({
-        variables: { ...bookToSave }
+        variables: { ...bookToSave },
+        refetchQueries: [{ query: GET_ME }],
       })
       console.log(saveBook)
 

@@ -54,7 +54,8 @@ const SavedBooks = () => {
 
     try {
       const { data } = await removeBook({
-        variables: { bookId }
+        variables: { bookId },
+        refetchQueries: [{ query: GET_ME }],
       })
 
       removeBookId(bookId);
